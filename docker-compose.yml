@@ -1,0 +1,8 @@
+version: '3'
+services:
+  redis_jibber:
+    image: redis:7.0.8
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./data/grafana:/data
