@@ -43,7 +43,7 @@
                 <artifactId>function-maven-plugin</artifactId>
                 <version>0.10.1</version>
                 <configuration>
-                    <functionTarget>org.example.Funk</functionTarget>
+                    <functionTarget>me.mourjo.functions.Hello</functionTarget>
                 </configuration>
             </plugin>
             <plugin>
@@ -70,7 +70,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.example.Main</mainClass>
+                            <mainClass>me.mourjo.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

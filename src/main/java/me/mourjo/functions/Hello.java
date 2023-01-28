@@ -1,8 +1,9 @@
-package org.example;
+package me.mourjo.functions;
 
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
+import me.mourjo.SessionInfo;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 
-public class Funk implements HttpFunction {
+public class Hello implements HttpFunction {
     private static final String htmlTemplate = """
                 <html>
                 <body>
@@ -43,7 +44,8 @@ public class Funk implements HttpFunction {
         }
 
         try {
-            String sessionInfo = SessionInfo.getInfo(user);
+            var users = SessionInfo.getInfo(user);
+            var sessionInfo = String.join("<br>", users);
             writer.write(htmlTemplate.formatted(user, sessionInfo));
         } catch (Exception e) {
             writer.write("Too many users, try again later");

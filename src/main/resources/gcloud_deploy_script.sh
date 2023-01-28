@@ -1,5 +1,5 @@
 gcloud functions deploy jibber-function  \
-  --entry-point org.example.Funk \
+  --entry-point me.mourjo.functions.Hello \
   --runtime java17 \
   --trigger-http \
   --allow-unauthenticated \

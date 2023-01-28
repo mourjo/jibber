@@ -1,10 +1,11 @@
-package org.example;
+package me.mourjo;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.resps.Tuple;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ public class SessionInfo {
     private static final DateFormat dft = new SimpleDateFormat("dd MMM yyyy HH:mm:ss:SSS Z");
     private static final double timeoutMillis = 10 * 60 * 1000D;
 
-    public static String getInfo(String user) {
+    public static Collection<String> getInfo(String user) {
         String keyStorePassword = System.getenv("KEYSTORE_PASS");
         String keystoreLocation = System.getenv("KEYSTORE_LOCATION");
         System.setProperty("javax.net.ssl.keyStoreType", "PKCS12");
@@ -36,8 +37,7 @@ public class SessionInfo {
             jedis.zremrangeByScore("recent_users", Double.NEGATIVE_INFINITY, System.currentTimeMillis() - timeoutMillis);
             var activeUsers = jedis.zrangeWithScores("recent_users", 0, System.currentTimeMillis());
             Collections.reverse(activeUsers);
-            var users = activeUsers.stream().map(tup -> tup.getElement() + " active until " + format(tup)).collect(Collectors.toList());
-            return String.join("<br>", users);
+            return activeUsers.stream().map(tup -> tup.getElement() + " active until " + format(tup)).collect(Collectors.toList());
         }
     }
 
