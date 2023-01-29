@@ -36,12 +36,13 @@ public class SessionInfo {
         try (Jedis jedis = new Jedis(host, port, 10_000, 10_000, true)) {
             jedis.auth(redisPassword);
 
+            jedis.zremrangeByScore("recent_users", Double.NEGATIVE_INFINITY, System.currentTimeMillis() - timeoutMillis);
+
             var total_users = jedis.zcount("recent_users", Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
             if (total_users > MAX_USERS) {
                 throw new TooManyUsersException(total_users);
             }
 
-            jedis.zremrangeByScore("recent_users", Double.NEGATIVE_INFINITY, System.currentTimeMillis() - timeoutMillis);
             jedis.zadd("recent_users", (double) System.currentTimeMillis(), user);
 
             var activeUsers = jedis.zrangeWithScores("recent_users", 0, System.currentTimeMillis());
